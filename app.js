@@ -51,15 +51,15 @@ app.get("/",(req,res)=>{
 
 const validateListing=(req,res,next)=>{
     // Validate req.body against the schema
-    const { error } = listingSchema.validate({ listing: req.body });
+    const { error } = listingSchema.validate({ listing: req.body.listing });
     if (error) {
         // Handle validation error
         // error=error.map((el)=>el.message.join(",")); //if it is array
         return next(new ExpressError(400, error.details[0].message));
     }
     next();
-
 }
+
 //Index Route
 app.get("/listings",wrapAsync(async (req,res)=>{
     const allListings=await Listing.find({});
@@ -101,7 +101,7 @@ app.put("/listings/:id",validateListing ,wrapAsync(async (req,res)=>{
     const listing=req.body.listing;
     let {id}=req.params;
     // Listing.findByIdAndUpdate(id,{...listing}); //this is use of deconstructor...
-    // console.log(listing);
+    console.log(listing);
     // console.log(id);
     await Listing.findByIdAndUpdate(id,listing);
     // res.send("ok check console");
